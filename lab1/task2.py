@@ -1,9 +1,12 @@
+# Запрос данных у пользователя
 text = input("Введите строку: ")
-result = ""
+
+#строка со всеми гласными
 vowels = "aeiouAEIOU"
 
-for char in text:
-    if char not in vowels:
-        result += char
+#создаем таблицу перевода строки и указываем нашу строку, как символы, которые необходимо удалить
+translation_table = str.maketrans('', '', vowels)
 
+#применяем таблицу 
+result = text.translate(translation_table)
 print("Результат:", result)
