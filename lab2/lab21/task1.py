@@ -1,3 +1,4 @@
+# импортируем модуль регулярных выражений для split
 
 import re
 
@@ -14,7 +15,6 @@ entr_str = entr_str.lower()
 words = re.split(r'[ ,.!?]', entr_str)
 words = ' '.join(words)
 words = words.split()
-# length = len(words)
 
 #создадим словари
 
@@ -26,6 +26,8 @@ cur_reps_dict = {}
 counter = 0
 print(words)
 print("\n")
+
+# когда встречаем слово, увелииваем счетчик
 
 for word in words:
     reps_dict[word] = reps_dict.get(word, 0) + 1
