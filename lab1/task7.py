@@ -5,4 +5,4 @@ seconds = float(input("Введите количество секунд: "))
 minutes = int(seconds // 60)
 
 # Выврод результатов на экран
-print("Ваше время - " + str(minutes) + " минут, " + str(seconds % 60) +" секунд.")
+print(f"Ваше время - {minutes} минут, {seconds % 60} секунд.")
