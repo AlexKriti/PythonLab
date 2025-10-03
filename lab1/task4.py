@@ -17,4 +17,4 @@ num = num%5
 second = str(num//2)
 num = num%2
 first = str(num//1)
-print("Понадобится "+hundreds+" купюр по 100, "+fifties+" купюр по 50, "+tenth+" купюр по 10, "+fifth+" купюр по 5, "+second+" монет по 2, "+first+" монет по 1")
+print(f"Понадобится {hundreds} купюр по 100, {fifties} купюр по 50, {tenth} купюр по 10, {fifth} купюр по 5, {second} монет по 2, {first} монет по 1")
