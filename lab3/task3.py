@@ -40,16 +40,14 @@ class Bank():
         if client_id not in self.clients:
             raise ValueError("Клиент не найден")
 
-        for account in self.clients[client_id].accounts.values(): # здесь может быть ошибка обращения к id
+        for account in self.clients[client_id].accounts.values():
             if account.acc_id == f"{client_id}{currency}":
                 raise ValueError("Счет в этой валюте уже существует")
 
         acc_id = f"{client_id}{currency.upper()}"
-        # print(acc_id)
         self.clients[client_id].accounts[acc_id] = BankAccount(acc_id,client_id, currency, balance = 0)
     
     def close_account(self, acc_id, client_id):
-        # print(f"{client_id} {acc_id}")
         account = self.clients[client_id].accounts.get(acc_id)
         if not account:
             raise ValueError("Счет не найден")
@@ -64,7 +62,6 @@ class Bank():
         print( acc_id[0:-3])
         if int(acc_id[0:-3]) != client_id:
             raise ValueError("Данный счет не принадлежит данному клиенту.")
-        # client_id = int(acc_id[0:-3])
         account = self.clients[client_id].accounts.get(acc_id)
         if not account:
             raise ValueError("Счет не найден")
@@ -87,22 +84,45 @@ class Bank():
         account.balance -= amount
 
     def transfer(self, from_account, to_account, amount, client_id_f, client_id_t):
+        exchange_rate = {"USDRUB": 81, "USDEUR": 0.86, "EURRUB": 95}
         
         if from_account not in self.clients[client_id_f].accounts or to_account not in self.clients[client_id_t].accounts:
             raise ValueError("Один из счетов не найден")
+
+        if from_account == to_account:
+            raise ValueError("Нельзя перевести деньги со счета на этот же счет")
+
+        if amount <= 0:
+            raise ValueError("Нельзя перевести нулевую или отрицательную сумму")
         
         from_acc = self.clients[client_id_f].accounts[from_account]
         to_acc = self.clients[client_id_t].accounts[to_account]
         
         if from_acc.client_id != client_id_f:
             raise PermissionError("Доступ запрещен")
+
         if from_acc.currency != to_acc.currency:
-            raise CurrencyMismatchException("Валюты счетов не совпадают")
+            if from_acc.currency == "USD":
+                if to_acc.currency == "RUB":
+                    amount_tran = amount*exchange_rate["USDRUB"]
+                else:
+                    amount_tran = amount*exchange_rate["USDEUR"]
+            elif from_acc.currency == "EUR":
+                if to_acc.currency == "USD":
+                    amount_tran = amount*(1/exchange_rate["USDEUR"])
+                else:
+                    amount_tran = amount*exchange_rate["EURRUB"]
+            else: 
+                if to_acc.currency == "USD":
+                    amount_tran = amount*(1/exchange_rate["USDRUB"])
+                else:
+                    amount_tran = amount*(1/exchange_rate["EURRUB"])
         if from_acc.balance < amount:
             raise InsufficientFundsException("Недостаточно средств")
         
         from_acc.balance -= amount
-        to_acc.balance += amount
+        to_acc.balance += amount_tran
+        print(f"amount_tran = {amount_tran}")
 
     def get_client_accounts(self, client_id):
         return [acc for acc in self.clients[client_id].accounts.values() if acc.client_id == client_id]        
@@ -130,8 +150,10 @@ def main():
     bank.open_account(1, "RUB")
     bank.open_account(1, "USD")
     bank.open_account(2, "RUB")
-    # ...
     current_client = None
+
+    
+    
     
     while True:
         if not current_client:
@@ -165,26 +187,26 @@ def main():
                 print(f"Счет №{new_account} в валюте {currency} успешно открыт")
                 
             elif choice == '2':
-                acc_id = str(input("Введите номер счета('(ваш_ID)(валюта_счета_БОЛЬШИМИБУКВАМИ)'): "))
+                acc_id = str(input("Введите номер счета('(ваш_ID)(валюта_счета)'): ")).upper()
                 bank.close_account(acc_id, current_client.client_id)
                 print("Счет успешно закрыт")
                 
             elif choice == '3':
-                acc_id = str(input("Введите номер счета('(ваш_ID)(валюта_счета_БОЛЬШИМИБУКВАМИ)'): "))
+                acc_id = str(input("Введите номер счета('(ваш_ID)(валюта_счета)'): ")).upper()
                 amount = float(input("Введите сумму пополнения: "))
                 bank.deposit(acc_id, amount, client_id)
                 print("Счет успешно пополнен")
                 
             elif choice == '4':
-                acc_id = str(input("Введите номер счета('(ваш_ID)(валюта_счета_БОЛЬШИМИБУКВАМИ)'): "))
+                acc_id = str(input("Введите номер счета('(ваш_ID)(валюта_счета)'): ")).upper()
                 amount = float(input("Введите сумму для снятия: "))
                 bank.withdraw(acc_id, amount, current_client.client_id)
                 print("Средства успешно сняты")
                 
             elif choice == '5':
-                from_acc = str(input("Введите номер счета, с которого вы хотите перевести('(ваш_ID)(валюта_счета_БОЛЬШИМИБУКВАМИ)'): "))
-                to_acc = str(input("Введите номер счета, на который вы хотите перевести('(ваш_ID)(валюта_счета_БОЛЬШИМИБУКВАМИ)'): "))
-                amount = float(input("Введите сумму перевода: "))
+                from_acc = str(input("Введите номер счета, с которого вы хотите перевести('(ваш_ID)(валюта_счета)'): ")).upper()
+                to_acc = str(input("Введите номер счета, на который вы хотите перевести('(ваш_ID)(валюта_счета)'): ")).upper()
+                amount = float(input(f"Введите сумму перевода(В валюте первого счета - {from_acc[-3::].upper()}): "))
                 bank.transfer(from_acc, to_acc, amount, current_client.client_id, int(to_acc[0:-3]))
                 print("Перевод успешно выполнен")
                 
@@ -200,13 +222,12 @@ def main():
             elif choice == '8':
                 answ = int(input("Вы уверены, что хотите выйти из системы?(введите 0(нет) или 1(да))"))
                 if answ == 0:
-                    main()
+                    print("Возврат в систему...")
                 elif answ != 1:
                     print("Вы неправильно ввели значение, возврат в систему...")
-                    main()
                 else:
                     print("Выход из системы...")
-                break
+                    break
                 
             else:
                 print("Неверный выбор")
