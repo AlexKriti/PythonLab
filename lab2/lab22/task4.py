@@ -1,27 +1,20 @@
-# определим фунцию транспонирования матрицы
+def transposing_matrix(matrix):
+    transpose_matrix = []
+    for i in range(len(matrix)):
+        transpose_row = []
+        for row in matrix:
+            transpose_row.append(row[i])
+        transpose_matrix.append(transpose_row)
+    return transpose_matrix
 
-def transposing(matrix):
 
-    # определяем размеры матрицы
 
-    rows = len(matrix)
-    cols = len(matrix[0])
+# transpose_matrix = [[row[i] for row in matrix] for i in range(len(matrix))] через списочные включения 
 
-    # подготовим основу для транспонированной матрицы 
+matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
 
-    transposed_matrix = [[0] * rows  for _ in range(cols )]
-
-    # заполняем основу транспонированной матрицы значениями из данной матрицы   
-
-    for i in range(rows):
-        for j in range(cols):
-            transposed_matrix[j][i] = matrix[i][j]
-
-    # возвращаем транспонированную матрицу
-    
-    return transposed_matrix
-
-# выведем результат транспонирования пробной матрицы
-
-print("Транспонируем матрицу [[56, 25], [78, 42]]: ")
-print(transposing([[56, 25], [78, 42]]))
+print(transposing_matrix(matrix))
