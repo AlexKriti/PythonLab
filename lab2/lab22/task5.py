@@ -1,7 +1,7 @@
 # объявляем декоратор, словарь для данных и обертку
 
 def cache(func):
-    cache_dictionary = {} 
+    cache_dict = {} 
     def wrap(*args, **kwargs):
 
         # создаем ключ для кэша
@@ -10,14 +10,14 @@ def cache(func):
 
         # проверяем наличия кэша в словаре   
 
-        if key in cache_dictionary: 
-            return cache_dictionary[key]
+        if key in cache_dict: 
+            return cache_dict[key]
 
         # вычисляем и сохраняем результат в словарь
 
         else :
             result = func(*args, **kwargs)
-            cache_dictionary[key] = result
+            cache_dict[key] = result
         return result
     return wrap
 
@@ -25,7 +25,14 @@ def cache(func):
 
 @cache
 def test_sum(a,b): 
-    return(a+b)
+    if type(a) == type(b):
+        return(a+b)
+    else:
+        print("Types of data are different")
 
-res = test_sum(1 ,2 )
+res = test_sum(1 ,2)
+print(res)
+res = test_sum(a=5, b=11)
+print(res)
+res = test_sum(a="5", b=11)
 print(res)

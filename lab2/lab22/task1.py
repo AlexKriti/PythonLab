@@ -21,10 +21,12 @@ def flatten_list(data):
         i += 1
 
 # пример использования
-my_list_1 = [1, 2, 3, 4, 5, [6, [7, [], 8, [9]]]]
-my_list_2 = [1, [2, 3], [4, [[10], 11]], 5, [6, [7, [], 8, [9]]], [12]]
 
-flatten_list(my_list_1)
-flatten_list(my_list_2)
-print(my_list_1)
-print(my_list_2)
+if __name__ == "__main__":
+    my_list_1 = [1, 2, 3, 4, 5, [6, [7, [], 8, [9]]]]
+    my_list_2 = [1, [2, 3], [4, [[10], 11]], 5, [6, [7, [], 8, [9]]], [12]]
+    
+    flatten_list(my_list_1)
+    flatten_list(my_list_2)
+    print(my_list_1)
+    print(my_list_2)

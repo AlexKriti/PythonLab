@@ -5,7 +5,7 @@ def merged_sorted_list(lst1, lst2):
     # инициализируем начальные данные
 
     lst = []
-    i=0 
+    i = 0 
     j = 0 
 
     # проходим основной цикл слияния(сравниваем/добавляем элементы)
@@ -30,7 +30,7 @@ def merged_sorted_list(lst1, lst2):
 
 # пример для исполнения
 
-lst1= [1,2,3 ]
-lst2 = [-1, 0, 1,2,6]
-lst = merged_sorted_list(lst1, lst2)
-print(lst)
+lst1= [1, 2, 3]
+lst2 = [-1, 0, 1, 2, 6]
+res_lst = merged_sorted_list(lst1, lst2)
+print(res_lst)
