@@ -3,31 +3,7 @@ from matplotlib.patches import Ellipse, Circle, Rectangle, Polygon
 import threading
 import os
 
-def play_audio_simple(file_path):
-    """Самый простой способ воспроизвести аудио без дополнительных библиотек"""
-    try:
-        if os.name == 'nt':  # Windows
-            os.system(f'start "" "{file_path}"')
-        else:  # Mac/Linux
-            os.system(f'xdg-open "{file_path}"')
-    except Exception as e:
-        print(f"Аудио не воспроизведено: {e}")
-
-# Получаем текущую директорию скрипта
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Формируем путь к WAV файлу
-wav_file_path = os.path.join(current_dir, 'aud.wav')
-
-if os.path.exists(wav_file_path):
-    print(f"Найден аудиофайл: {wav_file_path}")
-    audio_thread = threading.Thread(target=play_audio_simple, args=(wav_file_path,))
-    audio_thread.start()
-    print("Аудио запущено!")
-else:
-    print(f"Аудиофайл не найден: {wav_file_path}")
-    print(f"Текущая директория: {current_dir}")
-    print(f"Содержимое директории: {os.listdir(current_dir)}")
+    
 
 # Создаем фигуру и оси
 fig, ax = plt.subplots(figsize=(10, 8))
@@ -107,16 +83,6 @@ ax.set_xlim(-5, 6)
 ax.set_ylim(-2, 3)
 ax.set_aspect('equal')
 ax.axis('off')  # Убираем оси
-
-# Добавляем подпись
-plt.text(0, -1.8, 'Bóbr, kurwa!', fontsize=20, fontweight='bold', 
-         ha='center', va='center', color='darkred',
-         bbox=dict(boxstyle="round,pad=0.3", facecolor='lightyellow', edgecolor='red'))
-
-
-
-
-
 
 
 plt.tight_layout()
