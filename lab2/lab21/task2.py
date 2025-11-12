@@ -5,16 +5,30 @@ entr_str = input("Введите ваши числа через пробел: ")
 # разбиваем строку на части и преобразуем в числа с учетом точки
 
 numbers_str = entr_str.split()
-numbers = []
+# numbers = []
 numbers = [float(num) if '.' in num else int(num) for num in numbers_str]
 
 # определим список уникальных чисел после использования итератора множества
 
-unique_numbers = list(set(numbers))
+unique_numbers = []
+
+for num in numbers:
+    count = 0
+    for numi in numbers:
+        if num == numi:
+            count += 1
+    if count == 1:
+        unique_numbers.append(num)
+        
+filt_nums = set(numbers)
 
 # определяем повторяющиеся элементы через список уникальных элементов
 
-repeated_numbers= [num for num in unique_numbers if numbers.count(num) > 1  ]
+
+repeated_numbers= []
+for num in filt_nums:
+    if num not in unique_numbers:
+        repeated_numbers.append(num)
 
 # определяем четные/нечетные элементы (isinstance - проверка типа элемента)
 

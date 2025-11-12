@@ -34,8 +34,7 @@ for word in words:
 print(reps_dict)
 
 for word in reps_dict:
-    if(reps_dict[word] == 1):
-        counter = counter + 1
+    counter = counter + 1
 
 print("Кол-во уникальных слов: "  + str(counter))
 
